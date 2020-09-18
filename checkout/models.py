@@ -26,11 +26,10 @@ class Order(models.Model):
         max_digits=10, decimal_places=2, null=False, default=0)
 
     def _generate_order_number(self):
-        return uuid.uuid4.hex.upper()
+        return uuid.uuid4().hex.upper()
 
     def update_total(self):
-        self.order_total = self.lineitems.aggregate(Sum('line_item_total'))[
-            'lineitem_total__sum']
+        self.order_total = self.lineitems.aggregate(Sum('lineitem_total'))['lineitem_total__sum'] or 0
         if self.delivery_cost < settings.FREE_DELIVERY_THRESHOLD:
             self.delivery_cost = self.order_total * \
                 settings.STANDARD_DELIVERY_PERCENTAGE/100
@@ -42,7 +41,7 @@ class Order(models.Model):
     def save(self, *args, **kwargs):
         if not self.order_number:
             self.order_number = self._generate_order_number()
-        super.save(*args, **kwargs)
+        super().save(*args, **kwargs)
 
     def __str__(self):
         return self.order_number
@@ -60,9 +59,8 @@ class OrderLineItem(models.Model):
         max_digits=6, decimal_places=2, null=False, blank=False, editable=False)
 
     def save(self, *args, **kwargs):
-        if not self.order_number:
-            self.line_item_total = self.quantity * self.product.price
-        super.save(*args, **kwargs)
+        self.lineitem_total = self.quantity * self.product.price
+        super().save(*args, **kwargs)
 
     def __str__(self):
         return f'SKU {self.product.sku} on order {self.order.order_number}'
