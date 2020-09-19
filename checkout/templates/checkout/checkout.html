@@ -167,7 +167,15 @@
     </div>
   </div>
 </div>
-{% endblock %} {% block post_load_js %} {{ load.super }} 
+<div class="loading-overlay" id="loading-overlay">
+    <h1 class="text-light logo-font loading-spinner">
+        <span class="icon">
+            <i class="fas fa-3x fa-sinc-alt fa-spin"></i>
+        </span>
+    </h1>
+</div>
+{% endblock %} 
+{% block post_load_js %} {{ load.super }} 
 {{ stripe_public_key |json_script:"id_stripe_public_key" }} 
 {{ client_secret |json_script:"id_client_secret" }}
 <script src="{% static 'checkout/js/stripe_elements.js' %}"></script>
