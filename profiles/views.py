@@ -15,16 +15,18 @@ def profile(request):
             form.save()
             messages.success(
                 request, 'Successfully updated delivery information.')
-
-    template = 'profiles/profile.html'
-    form = UserProfileForm(instance=profile)
-    orders = profile.orders.all()
-    context = {
-        'form': form,
-        'orders': orders,
-        'on_profiles_page': True,
-    }
-    return render(request, template, context)
+        else:
+            messages.error(request, 'Failed to update/add user information. Please ensure form is valid')
+    else:
+        template = 'profiles/profile.html'
+        form = UserProfileForm(instance=profile)
+        orders = profile.orders.all()
+        context = {
+            'form': form,
+            'orders': orders,
+            'on_profiles_page': True,
+        }
+        return render(request, template, context)
 
 
 def order_history(request, order_number):
