@@ -1,0 +1,1 @@
+Boutique Ado Confirmation email for Order Number {{ order.order_number }}
