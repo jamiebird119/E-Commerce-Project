@@ -113,3 +113,32 @@ def edit_product(request, product_id):
             'product': product
         }
         return render(request, template, context)
+
+
+def add_product(request):
+
+    if request.metho == 'POST':
+        form = ProductForm(request.method, request.FILES)
+        if form.is_valid():
+            product = form.save()
+            messages.success(request, 'Product successfully added!')
+            return redirect(reverse('product_detail', args=[product.id]))
+        else:
+            messages.error(
+                request,  'Failed to add product. Please ensure form is valid')
+    else:
+        form = ProductForm()
+        template = 'products/add_product.html'
+        context = {
+            'form': form,
+        }
+        return render(request, template, context)
+
+
+def delete_product(request, product_id):
+
+    product = get_object_or_404(Product, pk=product_id)
+    product.delete()
+    messages.success(request, 'Product successfully deleted')
+    return redirect(reverse('products'))
+
