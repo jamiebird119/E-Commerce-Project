@@ -25,7 +25,7 @@ if os.environ.get('Developement') == 'True':
 else:
     DEBUG = False
 
-ALLOWED_HOSTS = ['ckz8780-boutique-ado.herokuapp.com', 'localhost']
+ALLOWED_HOSTS = ['https://online-ecommerce-project.herokuapp.com/', 'localhost']
 
 
 # Application definition
